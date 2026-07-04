@@ -1,64 +1,84 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl">
+<html lang="ckb" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kozher - Killer Game</title>
+    <title>Kozher - Killer Online</title>
     <link rel="stylesheet" href="style.css">
+    <!-- لێرەدا فایەربەیس زیاد دەکەین -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 </head>
 <body>
     <div class="container">
-        <!-- لاپەڕەی سەرەکی ڕێکخستنی یارییەکە -->
-        <div id="setup-screen" class="screen">
+        <!-- شاشەی هەڵبژاردنی سەرەکی -->
+        <div id="main-screen" class="screen">
             <h1>Kozher - Killer</h1>
-            
             <div class="input-group">
-                <label for="player-count">ژمارەی یاریزانان:</label>
-                <input type="number" id="player-count" min="3" max="20" value="4">
+                <label>ناوی خۆت بنووسە:</label>
+                <input type="text" id="player-name" placeholder="ناوەکەت لێرە بنووسە...">
             </div>
-
-            <div class="input-group">
-                <label for="killer-count">ژمارەی کوژەرەکان (Kozher):</label>
-                <input type="number" id="killer-count" min="1" max="5" value="1">
-            </div>
-
-            <div class="input-group">
-                <label for="game-time">کاتی یاری (بە خولەک):</label>
-                <input type="number" id="game-time" min="1" max="20" value="5">
-            </div>
-
-            <button id="start-btn" class="btn">دەستپێکردنی یاری</button>
+            <button id="btn-create-mode" class="btn">دروستکردنی ژوور (Host)</button>
+            <button id="btn-join-mode" class="btn danger-btn">چوونە ناو ژوور (Join)</button>
         </div>
 
-        <!-- لاپەڕەی پیشاندانی ڕۆڵی یاریزانەکان -->
-        <div id="role-screen" class="screen hidden">
-            <h2>کارتی یاریزانەکە بکەرەوە</h2>
-            <p id="player-number">یاریزانی ١</p>
+        <!-- شاشەی ڕێکخستنی ژوور بۆ Host -->
+        <div id="host-screen" class="screen hidden">
+            <h2>ڕێکخستنی ژوور</h2>
+            <div class="room-code-box">کۆدی ژوور: <span id="host-room-code">----</span></div>
             
+            <div class="input-group">
+                <label>ژمارەی کوژەرەکان (Kozher):</label>
+                <input type="number" id="killer-count" min="1" max="3" value="1">
+            </div>
+            <div class="input-group">
+                <label>کاتی یاری (بە خولەک):</label>
+                <input type="number" id="game-time" min="1" max="15" value="5">
+            </div>
+
+            <h3>یاریزانە بەشداربووەکان (<span id="player-count-text">0</span>):</h3>
+            <div id="host-player-list" class="player-list"></div>
+
+            <button id="btn-start-game" class="btn">دەستپێکردنی یاری</button>
+        </div>
+
+        <!-- شاشەی چاوەڕوانی بۆ یاریزانانی تر -->
+        <div id="join-screen" class="screen hidden">
+            <h2>چوونە ناو ژوور</h2>
+            <div class="input-group" id="join-input-area">
+                <label>کۆدی ژوورەکە بنووسە:</label>
+                <input type="text" id="join-room-code" placeholder="بۆ نموونە: 4732" maxlength="4">
+                <button id="btn-submit-join" class="btn" style="margin-top: 10px;">پەیوەندی بەستن</button>
+            </div>
+            <div id="waiting-area" class="hidden">
+                <div class="room-code-box">تۆ لە ژووری: <span id="joined-room-id">----</span></div>
+                <p style="color: #aaa; margin-bottom: 10px;">چاوەڕوانی سەرۆکی ژوورەکە بە تا یارییەکە دەستپێبکات...</p>
+                <h3>لیستی یاریزانەکان:</h3>
+                <div id="join-player-list" class="player-list"></div>
+            </div>
+        </div>
+
+        <!-- شاشەی پیشاندانی ڕۆڵ (کارتەکە) -->
+        <div id="role-screen" class="screen hidden">
+            <h2>ڕۆڵەکەت ببینە</h2>
             <div id="card" class="card">
-                <div class="card-inner">
+                <div class="card-inner" id="card-inner">
                     <div class="card-front">کلیک لێرە بکە بۆ بینینی ڕۆڵەکەت</div>
-                    <div class="card-back" id="role-text">شوێنەکە لێرە دەبێت</div>
+                    <div class="card-back" id="role-text">بارودۆخ لێرەیە</div>
                 </div>
             </div>
-
-            <button id="next-btn" class="btn hidden">یاریزانی داهاتوو</button>
+            <p style="color: #aaa; font-size: 0.9rem;">دوای بینینی ڕۆڵەکەت، چاوەڕێ بە تا کاتژمێرەکە کار دەکات.</p>
         </div>
 
-        <!-- لاپەڕەی کاتژمێر و بەڕێوەچوونی یارییەکە -->
+        <!-- شاشەی سەرەکی ناو یاری -->
         <div id="game-screen" class="screen hidden">
             <h2>یارییەکە دەستی پێکرد!</h2>
             <div id="timer">05:00</div>
-            
-            <h3>لیستی شوێنە گومانلێکراوەکان:</h3>
-            <div id="locations-list" class="locations-grid">
-                <!-- شوێنەکان بە جاوابسکریپت لێرە دادەنرێن -->
-            </div>
-
-            <button id="reset-btn" class="btn danger-btn">کۆتایی هێنان بە یاری</button>
+            <h3 style="margin-top: 15px; color: #bbb;">لیستی شوێنە گومانلێکراوەکان:</h3>
+            <div id="locations-list" class="locations-grid"></div>
+            <button id="btn-end-game" class="btn danger-btn">کۆتایی هێنان بە یاری</button>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
