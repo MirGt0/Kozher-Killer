@@ -1,0 +1,180 @@
+/* ڕێکخستنی گشتی و فۆنت */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #121212; /* ڕەنگی تاریک بۆ باکگراوند */
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    direction: rtl; /* بۆ ئەوەی دەقە کوردییەکان ڕێک بن */
+}
+
+.container {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+/* شێوازی سکرینەکان */
+.screen {
+    background-color: #1e1e1e;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+h1 {
+    color: #e50914; /* ڕەنگی سووری ستایلی نێتفلێکس بۆ ناوی کوژەرەکە */
+    margin-bottom: 25px;
+    font-size: 2rem;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #f1f1f1;
+}
+
+/* ڕێکخستنی ئینپوتەکان */
+.input-group {
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #bbb;
+    font-size: 0.95rem;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background-color: #2a2a2a;
+    color: white;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+input:focus {
+    border-color: #e50914;
+    outline: none;
+}
+
+/* دوگمەکان */
+.btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #e50914;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background-color: #b80710;
+}
+
+.danger-btn {
+    background-color: #333;
+    border: 1px solid #555;
+}
+
+.danger-btn:hover {
+    background-color: #444;
+}
+
+/* کارتی ڕۆڵەکان (ئەو کارتەی کلیکی لێ دەکەیت تا هۆڵەکە یاخود کوژەرەکە دەرکەوێت) */
+.card {
+    width: 100%;
+    height: 200px;
+    perspective: 1000px;
+    margin: 20px 0;
+    cursor: pointer;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+/* ئەم کڵاسە بە جاوابسکریپت زیاد دەکەین کاتێک کارتەکە وەرگێڕدرا */
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    padding: 20px;
+}
+
+.card-front {
+    background-color: #2a2a2a;
+    border: 2px dashed #e50914;
+    color: #e50914;
+}
+
+.card-back {
+    background-color: #e50914;
+    color: white;
+    transform: rotateY(180deg);
+    font-weight: bold;
+}
+
+/* کاتژمێر */
+#timer {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #e50914;
+    margin: 20px 0;
+}
+
+/* لیستی شوێنەکان */
+.locations-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-left: 5px;
+}
+
+.location-item {
+    background-color: #2a2a2a;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    border: 1px solid #333;
+}
