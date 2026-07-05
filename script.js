@@ -202,23 +202,40 @@ function listenToGameStatus() {
         if(roomData.status === "waiting" && !gameScreen.classList.contains('hidden')) {
             location.reload();
         }
+        // ئەم دێڕە زیاد بکە لە ناو فەنکشنی listenToGameStatus
+if(roomData.status === "voting") {
+    clearInterval(gameTimer);
+    document.getElementById('timer').textContent = "🛑 هۆستەکە کاتی ڕاگرت!";
+    document.getElementById('voting-section').classList.remove('hidden');
+}
     });
 }
 
 function startLocalTimer(endTime) {
-    database.ref('rooms/' + roomCode).once('value', (snapshot) => {
-        const roomData = snapshot.val();
-        if (roomData) {
-            const cat = roomData.category || "all";
-            currentLocations = gameData[cat] || gameData.all;
+    // ١. شاردنەوەی بەشی دەنگدان لە سەرەتای یارییەکەدا
+    document.getElementById('voting-section').classList.add('hidden');
 
-            const listDiv = document.getElementById('locations-list');
-            listDiv.innerHTML = '';
-            currentLocations.forEach(loc => {
-                listDiv.innerHTML += `<div class="location-item">${loc}</div>`;
-            });
+    clearInterval(gameTimer);
+    gameTimer = setInterval(() => {
+        let now = Date.now();
+        let diff = endTime - now;
+        
+        // ٢. کاتێک کاتەکە تەواو دەبێت
+        if(diff <= 0) {
+            clearInterval(gameTimer);
+            document.getElementById('timer').textContent = "🔴 کاتی یاری تەواو بوو!";
+            
+            // پیشاندانی بەشی دەنگدان
+            document.getElementById('voting-section').classList.remove('hidden');
+            return;
         }
-    });
+        
+        let totalSec = Math.floor(diff / 1000);
+        let min = Math.floor(totalSec / 60);
+        let sec = totalSec % 60;
+        document.getElementById('timer').textContent = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+    }, 1000);
+}
 
     clearInterval(gameTimer);
     gameTimer = setInterval(() => {
@@ -236,27 +253,16 @@ function startLocalTimer(endTime) {
         let sec = totalSec % 60;
         document.getElementById('timer').textContent = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
     }, 1000);
-}
 
-// کۆتایی هێنان بە یاری
+// کاتێک هۆست یان یاریزان کلیک لە کۆتایی هێنان دەکەن
 document.getElementById('btn-end-game').addEventListener('click', () => {
     if (isHost) {
-        database.ref('rooms/' + roomCode + '/players').once('value', (snapshot) => {
-            const players = snapshot.val();
-            if (players) {
-                for (let id in players) {
-                    players[id].role = "";
-                }
-            }
-            database.ref('rooms/' + roomCode).set({
-                status: "waiting",
-                killerCount: 1,
-                gameTime: 5,
-                location: "",
-                players: players
-            });
+        // هۆستەکە ستاتوسەکە دەگۆڕێت بۆ دەنگدان بۆ ئەوەی لای هەمووان کاتەکە بوەستێت
+        database.ref('rooms/' + roomCode).update({
+            status: "voting"
         });
     } else {
+        // ئەگەر یاریزانی ئاسایی بوو تەنها لاپەڕەکەی بۆ نوێ دەبێتەوە
         location.reload();
     }
 });
