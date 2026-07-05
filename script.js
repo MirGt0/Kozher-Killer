@@ -46,21 +46,24 @@ function generateRoomCode() {
 document.getElementById('btn-start-game').addEventListener('click', () => {
     database.ref('rooms/' + roomCode + '/players').once('value', (snapshot) => {
         const players = snapshot.val();
+        if (!players) return;
+
         const playerIds = Object.keys(players);
         const playerCount = playerIds.length;
         const killerCount = parseInt(document.getElementById('killer-count').value);
         const gameTime = parseInt(document.getElementById('game-time').value);
         
-        // وەرگرتنی کەتەگۆری هەڵبژێردراو
+        // ١. وەرگرتنی کەتەگۆری هەڵبژێردراو
         const selectedCategory = document.getElementById('category-select').value;
-        currentLocations = gameData[selectedCategory]; // گۆڕینی وشەکان بۆ کەتەگۆرییە نوێیەکە
+        currentLocations = gameData[selectedCategory] || gameData.all;
 
         if(playerCount < 3) return alert("پێویستە لانی کەم ٣ یاریزان لە ژوورەکەدا بن!");
         if(killerCount >= playerCount) return alert("نابێت ژمارەی کوژەرەکان لە یاریزانەکان زیاتر بێت!");
 
-        // هەڵبژاردنی یەک وشەی ڕاندۆم لەو کەتەگۆرییەی دیاریکراوە
+        // ٢. هەڵبژاردنی یەک وشەی ڕاندۆم لەو کەتەگۆرییەی دیاریکراوە
         const chosenLocation = currentLocations[Math.floor(Math.random() * currentLocations.length)];
         
+        // ٣. دابەشکردنی ڕۆڵەکان بەسەر یاریزانەکاندا لای خۆمان لە ناو ئۆبجێکتەکەدا
         playerIds.forEach(id => {
             players[id].role = chosenLocation;
         });
@@ -74,16 +77,15 @@ document.getElementById('btn-start-game').addEventListener('click', () => {
             }
         }
         
-        // پاشەکەوتکردنی کەتەگۆرییەکە لە داتابەیس تا یاریزانەکانی تریش بیبینن
+        // ٤. نوێکردنەوەی داتابەیس بە یەکجار (ستاتوس لەگەڵ ڕۆڵی یاریزانەکان پێکەوە دەنێرین)
         database.ref('rooms/' + roomCode).update({
-            status: "started",
+            category: selectedCategory,
             gameTime: gameTime,
-            category: selectedCategory, // ناردنی ناوی کەتەگۆری بۆ داتابەیس
-            players: players
+            players: players,
+            status: "started" // 👈 ئەمە دەخرێتە کۆتایی بۆ ئەوەی دوای دابەشبوونی ڕۆڵەکان ئینجا کارتەکە لای یاریزانان دەرکەوێت
         });
     });
-});;
-
+});
 // کاتێک یاریزان کلیک دەکات بچێتە ناو ژوورێک
 document.getElementById('btn-join-mode').addEventListener('click', () => {
     myName = document.getElementById('player-name').value.trim();
