@@ -66,17 +66,25 @@
             </div>
         </div>
 
-        <!-- شاشەی پیشاندانی ڕۆڵ (کارتەکە) -->
-        <div id="role-screen" class="screen hidden">
-            <h2>ڕۆڵەکەت ببینە</h2>
-            <div id="card" class="card">
-                <div class="card-inner" id="card-inner">
-                    <div class="card-front">کلیک لێرە بکە بۆ بینینی ڕۆڵەکەت</div>
-                    <div class="card-back" id="role-text">بارودۆخ لێرەیە</div>
-                </div>
+        <div id="role-screen" class="hidden">
+    <h2>ڕۆڵەکەت ببینه</h2>
+    <!-- 1. لێرەدا دەبێت id کەی card بێت -->
+    <div id="card">
+        <!-- 2. لێرەدا دەبێت id کەی card-inner بێت -->
+        <div id="card-inner">
+            <!-- بەشی پێشەوەی کارتەکە -->
+            <div class="card-front">
+                <p class="click-text">کلیک لێرە بکە بۆ بینینی ڕۆڵەکەت</p>
             </div>
-            <p style="color: #aaa; font-size: 0.9rem;">دوای بینینی ڕۆڵەکەت، چاوەڕێ بە تا کاتژمێرەکە کار دەکات.</p>
+            <!-- بەشی پشتەوەی کارتەکە کە ڕۆڵەکەی تێدایە -->
+            <div class="card-back">
+                <p id="role-text">یان کۆژەری یان شوێنەکە</p>
+            </div>
         </div>
+    </div>
+    <p class="hint-text">دوای بینینی ڕۆڵەکەت، چاوەڕێ بە تا کاتژمێرەکە کار دەکات.</p>
+</div>
+</div>
 
         <!-- شاشەی سەرەکی ناو یاری -->
         <div id="game-screen" class="screen hidden">
