@@ -18,12 +18,12 @@ input:focus { border-color: #e50914; outline: none; }
 .player-name-item { padding: 8px 12px; border-bottom: 1px solid #2a2a2a; color: #fff; font-size: 1rem; }
 .player-name-item:last-child { border-bottom: none; }
 .card {
-    perspective: 1000px;
-    cursor: pointer;
-    margin: 20px auto;
-    width: 90%;
-    max-width: 320px;
-    height: 200px;
+    perspective: 1000px !important;
+    cursor: pointer !important;
+    margin: 20px auto !important;
+    width: 90% !important;          /* 👈 ناچاری دەکات پان بێتەوە بەپێی مۆبایلەکە */
+    max-width: 300px !important;    /* 👈 ناهێڵێت لە چوارچێوەی مۆبایل دەرچێت */
+    height: 180px !important;       /* 👈 بەرزییەکەی کەم دەکەینەوە بۆ ئەوەی ڕێک بێت */
 }
 #card-inner {
     width: 100%;
