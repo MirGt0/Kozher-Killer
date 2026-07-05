@@ -214,19 +214,7 @@ function listenToGameStatus() {
     });
 }
 
-function startLocalTimer(endTime) {
-    // سەرەتا دڵنیا دەبینەوە کە کەتەگۆرییە ڕاستەکە دەخوێنێتەوە لە داتابەیسەوە
-    database.ref('rooms/' + roomCode).once('value', (snapshot) => {
-        const roomData = snapshot.val();
-        const cat = roomData.category || "all";
-        currentLocations = gameData[cat];
 
-        const listDiv = document.getElementById('locations-list');
-        listDiv.innerHTML = '';
-        currentLocations.forEach(loc => {
-            listDiv.innerHTML += `<div class="location-item">${loc}</div>`;
-        });
-    });
 
     clearInterval(gameTimer);
     gameTimer = setInterval(() => {
@@ -244,7 +232,7 @@ function startLocalTimer(endTime) {
         let sec = totalSec % 60;
         document.getElementById('timer').textContent = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
     }, 1000);
-}
+
 
 // کۆتایی هێنان بە یاری
 document.getElementById('btn-end-game').addEventListener('click', () => {
