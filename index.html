@@ -67,23 +67,27 @@
             </div>
         </div>
 
-        <div id="role-screen" class="hidden">
-    <h2>ڕۆڵەکەت ببینه</h2>
-    <!-- 1. لێرەدا دەبێت id کەی card بێت -->
-    <div id="card">
-        <!-- 2. لێرەدا دەبێت id کەی card-inner بێت -->
+    <!-- 📱 بەشی کارتەکە بە ستایلی ناوخۆیی بۆ ناچارکردنی مۆبایل -->
+<div id="role-screen" class="hidden">
+    <h2 style="text-align: center; margin-bottom: 20px;">ڕۆڵەکەت ببینه</h2>
+    
+    <!-- لێرەدا قەبارەی کارتەکەمان بە جێگیری قفڵ کردووە تا لە شاشە دەرنەچێت -->
+    <div id="card" style="perspective: 1000px; cursor: pointer; margin: 20px auto; width: 290px !important; height: 180px !important;">
         <div id="card-inner">
             <!-- بەشی پێشەوەی کارتەکە -->
             <div class="card-front">
                 <p class="click-text">کلیک لێرە بکە بۆ بینینی ڕۆڵەکەت</p>
             </div>
-            <!-- بەشی پشتەوەی کارتەکە کە ڕۆڵەکەی تێدایە -->
+            <!-- بەشی پشتەوەی کارتەکە -->
             <div class="card-back">
-                <p id="role-text">یان کۆژەری یان شوێنەکە</p>
+                <p id="role-text" style="font-size: 1.3rem; font-weight: bold; margin: 0;"></p>
             </div>
         </div>
     </div>
-    <p class="hint-text">دوای بینینی ڕۆڵەکەت، چاوەڕێ بە تا کاتژمێرەکە کار دەکات.</p>
+    
+    <p class="hint-text" style="text-align: center; font-size: 0.9rem; color: #888; margin-top: 20px;">
+        دوای بینینی ڕۆڵەکەت، چاوەڕێ بە تا کاتژمێرەکە کار دەکات.
+    </p>
 </div>
 </div>
 
